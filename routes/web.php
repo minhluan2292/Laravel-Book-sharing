@@ -32,5 +32,8 @@ Route::get('/profile/{user}/edit', 'ProfilesController@edit')->name('profile.edi
 Route::patch('/profile/{user}', 'ProfilesController@update')->name('profile.update');
 
 Route::get('/contacts','ContactsController@get');
+Route::get('/chat', function () {
+    return view('chat.chat');
+});
 
 
