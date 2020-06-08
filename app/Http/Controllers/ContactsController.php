@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Message;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -16,4 +17,9 @@ class ContactsController extends Controller
         }
         return response()->json($contacts);
     }
+     public function getMessagesFor($id)
+     {
+         $messages = Message::where('from_user', $id)->orWhere('to_user', $id)->get();
+         return response()->json($messages);
+     }
 }
