@@ -1,7 +1,7 @@
 <template>
     <div class="feed">
         <ul v-if="contact">
-            <li v-for="message in messages" :class="`message${message.to == contact.id ? ' sent' : 'received'}`" :key="message.id">
+            <li v-for="message in messages" :class="`message${message.to_user == contact.id ? ' sent' : ' received'}`" :key="message.id">
                 <div class="text">
                     {{ message.text }}
                 </div>
@@ -14,14 +14,12 @@
     export default {
         props: {
             contact: {
-                type: Object,
-                required: true
+                type: Object
             },
             messages: {
                 type: Array,
                 required: true
             }
-
         }
     }
 </script>
@@ -46,13 +44,13 @@
                     display: inline-block;
                 }
                 &.received {
-                    text-align: right;
+                    text-align: left;
                     .text {
                         background: #b2b2b2;
                     }
                 }
                 &.sent {
-                    text-align: left;
+                    text-align: right;
                     .text {
                         background: #81c4f9;
                     }

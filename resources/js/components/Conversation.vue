@@ -1,7 +1,7 @@
 <template>
     <div class="conversation">
         <h1>{{ contact ? contact.name : 'Select a Contact' }}</h1>
-        <MessagesFeed :contact="contact" :message="messages" />
+        <MessagesFeed :contact="contact" :messages="messages" />
         <MessageComposer @send="sendMessage" />
     </div>
 </template>

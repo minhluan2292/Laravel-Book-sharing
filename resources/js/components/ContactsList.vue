@@ -1,7 +1,7 @@
 <template>
     <div class="contacts-list">
         <ul>
-            <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index,contact)" :class="{ 'selected': index == selected }">
+            <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)" :class="{ 'selected': index == selected }">
                 <div class="avatar">
                     <img :src="contact.profile.image" :alt="contact.name" style="max-height: 50px;max-width:100px;" />
                 </div>
