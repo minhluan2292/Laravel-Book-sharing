@@ -35,5 +35,7 @@ Route::get('/contacts','ContactsController@get');
 Route::get('/chat', function () {
     return view('chat.chat');
 });
+Route::get('/conversation/{id}','ContactsController@getMessagesFor');
+
 
 
