@@ -24,6 +24,11 @@
             };
         },
         mounted() {
+            Echo.private(`messages.${this.user.id}`)
+                .listen('NewMessage', (e) =>{
+                    this.handleIncoming(e.message);
+                });
+
             axios.get('/contacts')
                 .then((response) => {
                     this.contacts = response.data;
@@ -39,6 +44,12 @@
             },
             saveNewMessage(message) {
                 this.messages.push(message);
+            },
+            handleIncoming(message) {
+                if(this.selectedContact && message.from_user == this.selectedContact.id) {
+                    this.saveNewMessage(message);
+                }
+                alert(message.text);
             }
 
         },
