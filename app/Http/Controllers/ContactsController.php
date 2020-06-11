@@ -36,7 +36,8 @@ class ContactsController extends Controller
 
     public function getMessagesFor($id)
     {
-        Message::where('from_user', $id)->orWhere('to_user', $id)->get();
+        //mark all messages read
+        Message::where('from_user', $id)->where('to_user', auth()->id())->update(['read' => true]);
 
         $messages = Message::where(function($q) use ($id) {
             $q->where('from_user', auth()->id());
