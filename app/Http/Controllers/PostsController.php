@@ -47,13 +47,41 @@ class PostsController extends Controller
             'image' => ['required', 'image']
         ]);
 
-        $imagePath = request('image')->store('uploads','public');
-        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1200,1200);
-        $image->save();
+        // $imagePath = request('image')->store('uploads','public');
+        // $image = Image::make(public_path("$imagePath"))->fit(1200,1200);
+        // $image->save();
+
+        
+
+        //$file = request('image');
+
+
+        //$fileName = time() . '-' . $file->getClientOriginalName();
+
+        //$img=Image::make('public/uploads/', $file->getRealPath())->resize(320, 240)->save('public/uploads/',$fileName);
+        //$file->move('uploads', $fileName);
+
+        //$file->move('public/uploads', $fileName);
+	//dd(request()->getHttpHost()."/public/uploads/{$fileName}");
+	//$imgPath = request()->getHttpHost()."/public/uploads/{$fileName}";
+//dd($file->getRealPath());
+        //$image = Image::make($imgPath)->fit(1200,1200);
+        //$image->save();
+            
+        // $img = Image::make($file->getRealPath())
+        //     ->resize(1200, 1200)
+        //     ->save('public/uploads/', $file->getClientOriginalName());
+$originalImage= request('image');
+        $thumbnailImage = Image::make($originalImage);
+        $thumbnailPath = public_path().'/uploads/';
+        $originalPath = public_path().'/images/';
+        $thumbnailImage->save($originalPath.time().$originalImage->getClientOriginalName());
+        $thumbnailImage->resize(1200,1200);
+        $thumbnailImage->save($thumbnailPath.time().$originalImage->getClientOriginalName());
 
         auth()->user()->posts()->create([
             'caption' => $data['caption'],
-            'image' => $imagePath,
+            'image' => $thumbnailImage->basename
         ]);
 
         return redirect('/profile/' . auth()->user()->id);
