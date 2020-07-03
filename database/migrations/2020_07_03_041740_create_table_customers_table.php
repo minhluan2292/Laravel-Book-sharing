@@ -18,7 +18,7 @@ class CreateTableCustomersTable extends Migration
             $table->string('ad_id')->nullable();
             $table->string('list_id')->nullable();
             $table->boolean('company_ad')->default(0);
-            $table->string('phone')->nullable();
+            $table->string('phone')->nullable()->unique();
 
             $table->string('list_time')->nullable();
             $table->string('date')->nullable();
@@ -32,7 +32,7 @@ class CreateTableCustomersTable extends Migration
             $table->integer('region')->nullable();
             $table->string('region_name')->nullable();
             $table->string('type')->nullable();
-            $table->integer('price')->nullable();
+            $table->bigInteger('price')->nullable();
             $table->timestamps();
         });
     }
