@@ -38,6 +38,10 @@ Route::get('/chat', function () {
 Route::get('/conversation/{id}','ContactsController@getMessagesFor');
 Route::post('/conversation/send','ContactsController@send');
 
+Route::get('/chotot','CrawlerController@getInfoBDS')->name('chotot.bds');
+;
+
+
 
 
 
