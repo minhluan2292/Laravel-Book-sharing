@@ -62,16 +62,16 @@ class PostsController extends Controller
         //$file->move('uploads', $fileName);
 
         //$file->move('public/uploads', $fileName);
-	//dd(request()->getHttpHost()."/public/uploads/{$fileName}");
-	//$imgPath = request()->getHttpHost()."/public/uploads/{$fileName}";
-//dd($file->getRealPath());
+	    //dd(request()->getHttpHost()."/public/uploads/{$fileName}");
+	    //$imgPath = request()->getHttpHost()."/public/uploads/{$fileName}";
+        //dd($file->getRealPath());
         //$image = Image::make($imgPath)->fit(1200,1200);
         //$image->save();
             
         // $img = Image::make($file->getRealPath())
         //     ->resize(1200, 1200)
         //     ->save('public/uploads/', $file->getClientOriginalName());
-$originalImage= request('image');
+        $originalImage= request('image');
         $thumbnailImage = Image::make($originalImage);
         $thumbnailPath = public_path().'/uploads/';
         $originalPath = public_path().'/images/';
