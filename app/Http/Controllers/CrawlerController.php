@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Providers\ResponseHelper;
 use Illuminate\Http\Request;
 
 class CrawlerController extends Controller
@@ -18,6 +19,11 @@ class CrawlerController extends Controller
         return substr($headers[0], 9, 3);
     }
 
+    public function get()
+    {
+        $accounts = Customer::all();
+        return ResponseHelper::successOKResponse($accounts);
+    }
 
     public function addfromChotot(Request $request)
     {
@@ -51,13 +57,13 @@ class CrawlerController extends Controller
                             'account_oid' => $customer->ad->account_oid,
                             'account_name' => $customer->ad->account_name,
                             'subject' => $customer->ad->subject,
-                            'category' => $customer->ad->category,
-                            'area' => $customer->ad->area,
-                            'area_name' => $customer->ad->area_name,
-                            'region' => $customer->ad->region,
-                            'region_name' => $customer->ad->region_name,
-                            'type' => $customer->ad->type,
-                            'price' => $customer->ad->price
+                            'category' => isset($customer->ad->category) ? $customer->ad->category : null,
+                            'area' => isset($customer->ad->area) ? $customer->ad->area : null,
+                            'area_name' => isset($customer->ad->area_name) ? $customer->ad->area_name : null ,
+                            'region' => isset($customer->ad->region) ? $customer->ad->region : null,
+                            'region_name' => isset($customer->ad->region_name) ? $customer->ad->region_name : null,
+                            'type' => isset($customer->ad->type) ? $customer->ad->type : null,
+                            'price' => isset($customer->ad->price) ? $customer->ad->price : null
             
                         ]);
                     }
