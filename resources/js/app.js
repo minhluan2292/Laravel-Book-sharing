@@ -7,6 +7,9 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import Vuetify from '../plugins/vuetify'
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,6 +24,8 @@ window.Vue = require('vue');
 
 Vue.component('follow-button', require('./components/FollowButton.vue').default);
 Vue.component('chat-app', require('./components/ChatApp.vue').default);
+Vue.component('account-management', require('./components/AccountManagement.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,5 +34,6 @@ Vue.component('chat-app', require('./components/ChatApp.vue').default);
  */
 
 const app = new Vue({
-    el: '#app',
+    vuetify: Vuetify,
+    el: '#app'
 });
