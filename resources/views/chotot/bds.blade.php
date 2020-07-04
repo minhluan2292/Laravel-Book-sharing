@@ -3,8 +3,6 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-sm-12">
-            <div class="card">
 
             <form method="POST" action="/addfrompage">
                         @csrf
@@ -30,9 +28,8 @@
                 Dup {{ $dup }} 
                 Error {{ $error }} 
             @endisset
-                
-            </div>
-        </div> 
+            <account-management id="account-management" data-app></account-management>
+
     </div>
     
 </div>
