@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Autorun;
 use App\Customer;
+use App\Providers\RequestHelper;
 use App\Providers\ResponseHelper;
 use Illuminate\Http\Request;
 
 class CrawlerController extends Controller
 {
-    
     public function index()
     {
         return view('chotot.bds');
@@ -25,62 +26,51 @@ class CrawlerController extends Controller
         return ResponseHelper::successOKResponse($accounts);
     }
 
-    public function addfromChotot(Request $request)
+    public function addfromChotot()
     {
-        $dup = 0;
-        $add = 0;
-        $error = 0;
-        $page = $request['page'];
-        $topage = $request['topage'];
-        for($p=$page;$p<=$topage;$p++)
-        {
+            $p = Autorun::max('page');
+            $p++;
             $limit=50;
             $start=($p-1)*$limit;
 
-            $json = json_decode(file_get_contents("https://gateway.chotot.com/v1/public/ad-listing?region_v2=13000&cg=1000&limit=$limit&o=$start&st=s,k&page=$p"));
-            for($i=0; $i<count($json->ads); $i++) {
-                $id = $json->ads[$i]->list_id;
-                if($this->get_http_response_code("https://gateway.chotot.com/v1/public/ad-listing/$id") == "200")
-                {
-                    $customer = json_decode(file_get_contents("https://gateway.chotot.com/v1/public/ad-listing/$id"));
-                    if(Customer::wherePhone($customer->ad->phone)->count() == 0)
+            $urllist = "https://gateway.chotot.com/v1/public/ad-listing?region_v2=13000&cg=1000&limit=$limit&o=$start&st=s,k&page=$p";
+            $json = RequestHelper::simpleExecuteURL($urllist);
+            if(count($json->ads)>0)
+            {
+                for($i=0; $i<count($json->ads); $i++) {
+                    $id = $json->ads[$i]->list_id;
+                    $url = "https://gateway.chotot.com/v1/public/ad-listing/$id";
+                    $customer = RequestHelper::simpleExecuteURL($url);
+                    if(!isset($customer->message))
                     {
-                        $add++;          
-                        Customer::create([
-                            'ad_id' => $customer->ad->ad_id,
-                            'list_id' => $customer->ad->list_id,
-                            'company_ad' => $customer->ad->company_ad,
-                            'phone' => $customer->ad->phone,
-                            'list_time' => $customer->ad->list_time,
-                            'date' => $customer->ad->date,
-                            'account_id' => $customer->ad->account_id,
-                            'account_oid' => $customer->ad->account_oid,
-                            'account_name' => $customer->ad->account_name,
-                            'subject' => $customer->ad->subject,
-                            'category' => isset($customer->ad->category) ? $customer->ad->category : null,
-                            'area' => isset($customer->ad->area) ? $customer->ad->area : null,
-                            'area_name' => isset($customer->ad->area_name) ? $customer->ad->area_name : null ,
-                            'region' => isset($customer->ad->region) ? $customer->ad->region : null,
-                            'region_name' => isset($customer->ad->region_name) ? $customer->ad->region_name : null,
-                            'type' => isset($customer->ad->type) ? $customer->ad->type : null,
-                            'price' => isset($customer->ad->price) ? $customer->ad->price : null
-            
-                        ]);
+                        if(Customer::wherePhone($customer->ad->phone)->count() == 0)
+                        {
+                            Customer::create([
+                                'ad_id' => $customer->ad->ad_id,
+                                'list_id' => $customer->ad->list_id,
+                                'company_ad' => $customer->ad->company_ad,
+                                'phone' => $customer->ad->phone,
+                                'list_time' => $customer->ad->list_time,
+                                'date' => $customer->ad->date,
+                                'account_id' => $customer->ad->account_id,
+                                'account_oid' => $customer->ad->account_oid,
+                                'account_name' => $customer->ad->account_name,
+                                'subject' => $customer->ad->subject,
+                                'category' => isset($customer->ad->category) ? $customer->ad->category : null,
+                                'area' => isset($customer->ad->area) ? $customer->ad->area : null,
+                                'area_name' => isset($customer->ad->area_name) ? $customer->ad->area_name : null ,
+                                'region' => isset($customer->ad->region) ? $customer->ad->region : null,
+                                'region_name' => isset($customer->ad->region_name) ? $customer->ad->region_name : null,
+                                'type' => isset($customer->ad->type) ? $customer->ad->type : null,
+                                'price' => isset($customer->ad->price) ? $customer->ad->price : null
+                            ]);
+                        }
                     }
-                    else
-                    {
-                        $dup++;
-                    }
-                    
-                }  
-                else
-                {
-                    $error ++;
                 }
-
-
+                Autorun::create([
+                    'page' => $p,
+                    'runned' => true
+                ]);
             } 
-        }
-        return view('chotot.bds',compact('add','dup','error'));
     }
 }

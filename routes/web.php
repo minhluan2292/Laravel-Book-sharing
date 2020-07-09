@@ -37,9 +37,12 @@ Route::get('/chat', function () {
 });
 Route::get('/conversation/{id}','ContactsController@getMessagesFor');
 Route::post('/conversation/send','ContactsController@send');
-Route::post('addfrompage','CrawlerController@addfromChotot');
+Route::get('/chototrun','CrawlerController@addfromChotot')->name('chotot.bds');
 Route::get('/chotot','CrawlerController@index')->name('chotot.bds');
 Route::get('/accounts','CrawlerController@get')->name('chotot.bds');
+
+
+
 
 
 
