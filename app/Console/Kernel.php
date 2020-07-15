@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Http\Controllers\CrawlerController;
+use App\Console\Commands\UpdateStatus;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,9 +14,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        UpdateStatus::class,
     ];
-
     /**
      * Define the application's command schedule.
      *
@@ -25,9 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            CrawlerController::addfromChotot();
-        })->everyTwoMinutes();	;
+        $schedule->command('status:update')
+                ->everyMinute();
+        //$schedule->call('App\Http\Controllers\CrawlerController@addfromChotot')->everyMinute();	;
     }
 
     /**
